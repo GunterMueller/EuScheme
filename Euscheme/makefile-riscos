@@ -1,0 +1,75 @@
+# Makefile for RISC OS
+#
+# Requires UnixLib 3.6, NetLib 0.02, unixlib.o.uname
+
+.SUFFIXES: .c .o
+CC=cc
+CFLAGS=-JUnix:,@. -Datof=strtod -DRISCOS -DUNIX -DSIGNAL -c -Wpdn
+
+# where to look for things
+# look first in env variable EU_MODULE_PATH, then builtin
+# env variable is a comma separated list of directory names
+# with the normal RISC OS / and . character swapping.
+#
+# eg. euscheme:modules/    will be translated to euscheme:modules.
+# internally by UnixLib.
+#
+MODULE_SEARCH_PATH ="\"@/\",\"euscheme:tests/\",\"euscheme:modules/\""
+
+# look first in env variable EU_IMAGE_PATH, then builtin
+IMAGE_SEARCH_PATH = "\"euscheme:\""
+
+# if you want your image to have a different name
+# this will be translated to image/wks by UnixLib
+IMAGE = image.wks
+
+SRCS = msstuff.c xsdmem.c xsfun2.c xsint.c xsobj.c xssym.c \
+xscheme.c xsftab.c xsimage.c xsio.c xsprint.c \
+xscom.c xsfun1.c xsinit.c xsmath.c xsread.c \
+osdefs.h osptrs.h xsbcode.h xscheme.h xsproto.h \
+xsmodule.c xsobj.h xstable.c xsocket.c
+
+LISP=Boot/arith.em Boot/collect.em Boot/compare.em Boot/condcl.em \
+Boot/convert.em Boot/copy.em Boot/format.em Boot/level0.em \
+Boot/macros.em Boot/setter.em Boot/system.em Boot/telos.em \
+Boot/telosint.em Boot/thread.em Boot/user.em
+
+OBJS = msstuff.o xsdmem.o xsfun2.o xsint.o xsobj.o xssym.o \
+xscheme.o xsftab.o xsimage.o xsio.o xsprint.o \
+xscom.o xsfun1.o xsinit.o xsmath.o xsread.o \
+xsmodule.o xstable.o xsocket.o
+
+
+all: image/wks
+
+image/wks: euscheme saveimage
+	set EU_MODULE_PATH "EuScheme:Boot/,@/Boot/"
+	set euscheme$path @.
+	euscheme -n < saveimage
+
+euscheme: $(OBJS) via
+	link -o euscheme -via via
+	@squeeze euscheme
+
+xscheme.o: xscheme.c Makefile
+	$(CC) $(CFLAGS) -DIMAGE="\"$(IMAGE)\"" -c xscheme.c
+
+xscom.o: xscom.c Makefile
+	$(CC) $(CFLAGS) -DMODULE_SEARCH_PATH=$(MODULE_SEARCH_PATH) -c xscom.c
+
+xsimage.o: xsimage.c Makefile
+	$(CC) $(CFLAGS) -DIMAGE_SEARCH_PATH=$(IMAGE_SEARCH_PATH) -c xsimage.c
+
+clean:
+	wipe o.* f~r~c~v
+	remove euscheme
+	remove image/wks
+
+clean_sock:
+	remove o.msstuff
+	remove o.xsftab
+	remove o.xsinit
+	remove o.xsocket
+
+.c.o:;	$(CC) $(CFLAGS) $*.c
+

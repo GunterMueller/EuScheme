@@ -1,0 +1,155 @@
+.\" @(#)euscheme.1 1.0 95/01/16 RJB
+'\"macro stdmacro
+.nr X
+.TH euscheme 1 "16 Jan 1995"
+.SH NAME
+euscheme \- EuLisp Level 0 interpreter
+
+.SH SYNOPSIS
+.B euscheme
+[
+.B \-qntsf
+] [ file ] [ arg .\|.\|. ]
+
+.SH DESCRIPTION
+.IX "euscheme" "" "\fLeuscheme\fP \(em EuLisp Level 0 interpreter"
+.IX "EuLisp" "" "\fLeuscheme\fP \(em EuLisp Level 0 interpreter"
+.B euscheme
+is a small EuLisp Level 0 interpeter, based on David Michael Betz'
+xscheme.  Mostly compliant with the EuLisp definition 0.99, with a few
+Schemeisms still present.
+
+.SH OPTIONS
+.TP
+.B \-q
+quiet
+mode: print no messages, prompts or values. Useful when
+using
+.B euscheme
+as a filter or other agent.
+.TP
+.B \-n
+do not read in the initial Lisp image.
+.TP
+.B \-t
+switch on byte-code level tracing.
+.TP
+\fB\-f\fP \fIfile\fP
+take input from \fIfile\fP, skipping its first line.
+Useful for
+.B #!/bin/euscheme -f
+and the like in shell scripts.
+.TP
+.B \-s
+disables \fBsystem\fP and various other function calls.
+.PP
+Other args are not interpreted, but are available though
+.B getarg
+(see below)
+
+.SH FEATURES
+The module that contains all the useful stuff (e.g.,
+\fBcons\fP and friends) is called \fBlevel0\fP: if you import no modules,
+you get nothing at all, not even special forms. So a typical module looks like
+\fB
+.nf
+
+(defmodule foo
+   (import (level0 ...))
+
+   ...
+)
+.fi
+\fP
+and should be in a file named
+.B foo.em
+
+There are keywords (unbindable, unassignable, self-evaluating symbols), e.g.,
+.ne 6
+\fB
+.nf
+
+(defclass foo ()
+  ((a default: 99
+      keyword: a:
+      accessor: foo-a))
+  constructor: (make-foo a:))
+.fi
+\fP
+
+Try
+.B "(describe xx)"
+for information on object
+\fBxx\fP,
+and
+.B "(class-hierarchy)"
+to see all the classes.
+
+Some useful other tools include:
+.TP
+.B getenv
+and
+.B putenv
+to get and set environment variables.
+.TP
+.B getarg
+to get \fIn\fPth arg passed to
+.B euscheme.
+.TP
+.B exit
+to leave
+.B euscheme
+.PP
+In case of error, there is a simple error loop. When in the loop type
+.B help:
+for extra information.
+
+.SH ENVIRONMENT
+.LP
+.ne 3
+.TP
+.B EU_IMAGE_PATH
+a colon-separated list of directory names: where to look for the initial EuLisp
+image (generally named
+\fBimage.wks\fP).
+.B euscheme
+searches these first, then a system-installed path.
+.br
+.ne 3
+.TP
+.B EU_MODULE_PATH
+a colon-separated list of directory names: where to look for EuLisp
+modules.
+.B euscheme
+searches these first, then a system-installed path (which
+generally contains the current directory).
+
+.SH BUGS
+If
+.B euscheme
+starts up in module
+.B root
+then it is a good bet that it couldn't find the image file
+.B image.wks
+
+There are a few differences between
+.B euscheme
+and the EuLisp Level 0 definition,
+but as both are still changing it's futile to list them.
+
+.SH SEE ALSO
+.TP
+\fIThe EuLisp Definition\fP, available from
+.B "ftp://ftp.bath.ac.uk/pub/eulisp/defn-0.99.dvi.gz"
+.TP
+Also useful:
+.B "http://www.bath.ac.uk/~masjap/EuLisp/eulisp.html"
+.TP
+Euscheme Starter Notes:
+.B "http://www.bath.ac.uk/~masrjb/Sources/eunotes.html"
+.TP
+\fILisp and Symbolic Computation\fP, special edition on EuLisp,
+vol. 6, nos. 1-2, August 1993, R Kessler, ed.
+
+.\"	@(#)euscheme.1
+.\".Ee

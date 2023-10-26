@@ -1,0 +1,41 @@
+VERSION=0361
+
+CFLAGS = -DNOTDEF
+DOCS = eunotes.htm euscheme.1 
+
+OBJS = msstuff.o xsdmem.o xsfun2.o xsint.o xsobj.o xssym.o \
+xscheme.o xsftab.o xsimage.o xsio.o xsprint.o \
+xscom.o xsfun1.o xsinit.o xsmath.o xsread.o \
+xsmodule.o xstable.o 
+
+.c.o:
+	gcc -c $(CFLAGS) $<
+
+all:	eu.exe image.dos
+
+eu.exe:	eu
+	coff2exe -s "g:\gpp-112\bin\go32.exe" eu
+
+image.dos: eu.exe
+	saveimg.bat
+
+eu:	$(OBJS)
+	gcc -o eu $(OBJS) -lm -lpc
+
+xscheme.o:	xscheme.c
+	gcc -DIMAGE='"image.dos"' -c $(CFLAGS) xscheme.c
+
+xsimage.o:	xsimage.c
+	gcc -DIMAGE_SEARCH_PATH='".", "/eu"' -c $(CFLAGS) xsimage.c
+
+xscom.o:	xscom.c
+	gcc -DMODULE_SEARCH_PATH='".", "modules", "/eu/modules"' \
+-c $(CFLAGS) xscom.c
+
+zip:	eu.exe
+	zip eudos$(VERSION).zip readme eu.exe image.dos emu387 modules/*.em \
+$(DOCS)
+
+clean:
+	rm $(OBJS)
+

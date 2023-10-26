@@ -1,0 +1,88 @@
+EuScheme ported to DOS by Dave DeRoure, versions 0.20 and later.
+
+-----------------------------------------------------------------------------
+This is EuScheme version 0.20, ported to DOS by DDeR.  The original
+README follows the installation instructions.
+
+Installation
+------------
+
+EUDOS020.ZIP contains
+
+        readme          This file
+
+        eu.exe          The EU command
+
+        image.dos       The compiled image used by EU.EXE.  
+                        EU.EXE expects to find this in \EU
+                        or in the current directory
+
+        emu387          Emulator routines needed in the absence
+                        of a numeric coprocessor
+
+Unzip EUDOS020.ZIP in the directory \EU.  If you don't have
+a numeric coprocessor, emu387 must be pesent when you run EU.
+To ensure that it is always found, add this line to your 
+autoexec.bat file:
+
+        set GO32="emu \eu\emu387"
+
+Run EU.  You should get a user> prompt.  If instead you obtain
+a root> prompt then EU.EXE has been unable to find image.dos.
+
+Any problems with the DOS version should be reported to Dave
+DeRoure <dder@ecs.soton.ac.uk>.
+
+README
+------
+
+            Euscheme: an implementation of EuLisp level 0.
+                             (Mostly.)
+
+
+Based on the xscheme sources of David Michael Betz, this is a mostly EuLisp
+level 0 compliant interpreter (working from version 0.99 of the definition,
+and some extras).  The usual applies: unrestricted non-commercial use,
+you can't blame me for anything that goes wrong, and there are probably
+bugs.
+
+Installation:  look at the makefile, and use the appropriate set of flags.
+Euscheme need two paths:  where to look for the compiled image, and
+where to look for modules to load.
+
+Image:  first euscheme checks the env variable EU_IMAGE_PATH (a colon
+separated list of directory names), then a builtin path, set from
+IMAGE_SEARCH_PATH in the Makefile.
+
+Modules: ditto for env variable EU_MODULE_PATH, then builtin
+MODULE_SEARCH_PATH (e.g., you might want to provide a set of system supplied
+modules).
+
+Bits:
+The special form (!> foo) loads and enters the module foo.em.  Modules
+can rename and filter on import (not yet on export).  Use level0.em
+for all the basic stuff, e.g.,
+
+(defmodule mymod
+  (import (level0))
+  ...
+)
+
+If you import no modules, you get nothing---not even special forms!  See
+Modules/rename.em.
+
+There are keywords (unbindable, unassignable, self-evaluating symbols), e.g.,
+(defclass foo ()
+  ((a default: 99
+      keyword: a:
+      accessor: foo-a))
+  constructor: (make-foo a:))
+
+Try (describe xx) for information on xx.
+(class-hierarchy) to see all the classes.
+
+Look at directory Modules for a few examples (the stuff in Boot uses a non-
+eulisp syntax).
+
+--Russell
+rjb@cs.bath.ac.uk

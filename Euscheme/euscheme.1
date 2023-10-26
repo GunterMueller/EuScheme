@@ -1,0 +1,198 @@
+
+
+
+euscheme(1)                                           euscheme(1)
+
+
+NNAAMMEE
+       euscheme - EuLisp Level 0 interpreter
+
+
+SSYYNNOOPPSSIISS
+       eeuusscchheemmee [ --qqnnttssff ] [ file ] [ arg ... ]
+
+
+DDEESSCCRRIIPPTTIIOONN
+       eeuusscchheemmee  is  a  small EuLisp Level 0 interpeter, based on
+       David Michael Betz' xscheme.  Mostly  compliant  with  the
+       EuLisp  definition  0.99, with a few Schemeisms still pre-
+       sent.
+
+
+OOPPTTIIOONNSS
+       --qq     quiet mode: print no messages, prompts  or  values.
+              Useful  when  using  eeuusscchheemmee  as a filter or other
+              agent.
+
+       --nn     do not read in the initial Lisp image.
+
+       --tt     switch on byte-code level tracing.
+
+       --ff _f_i_l_e
+              take input from  _f_i_l_e,  skipping  its  first  line.
+              Useful for ##!!//bbiinn//eeuusscchheemmee --ff and the like in shell
+              scripts.
+
+       --ss     disables ssyysstteemm and various other function calls.
+
+       Other args are not interpreted, but are  available  though
+       ggeettaarrgg (see below)
+
+
+FFEEAATTUURREESS
+       The  module that contains all the useful stuff (e.g., ccoonnss
+       and friends) is called lleevveell00: if you import  no  modules,
+       you get nothing at all, not even special forms. So a typi-
+       cal module looks like
+
+
+       ((ddeeffmmoodduullee ffoooo
+          ((iimmppoorrtt ((lleevveell00 ......))))
+
+          ......
+       ))
+
+       and should be in a file named ffoooo..eemm
+
+       There  are  keywords  (unbindable,   unassignable,   self-
+
+
+
+
+
+
+                           16 Jan 1995                          1
+
+
+
+
+
+euscheme(1)                                           euscheme(1)
+
+
+       evaluating symbols), e.g.,
+
+
+       ((ddeeffccllaassss ffoooo (())
+         ((((aa ddeeffaauulltt:: 9999
+             kkeeyywwoorrdd:: aa::
+             aacccceessssoorr:: ffoooo--aa))))
+         ccoonnssttrruuccttoorr:: ((mmaakkee--ffoooo aa::))))
+
+
+       Try  ((ddeessccrriibbee  xxxx))  for  information  on  object  xxxx, and
+       ((ccllaassss--hhiieerraarrcchhyy)) to see all the classes.
+
+       Some useful other tools include:
+
+       ggeetteennvv and ppuutteennvv to get and set environment variables.
+
+       ggeettaarrgg to get _nth arg passed to eeuusscchheemmee..
+
+       eexxiitt   to leave eeuusscchheemmee
+
+       In case of error, there is a simple error  loop.  When  in
+       the loop type hheellpp:: for extra information.
+
+
+EENNVVIIRROONNMMEENNTT
+       EEUU__IIMMAAGGEE__PPAATTHH
+              a colon-separated list of directory names: where to
+              look for the initial EuLisp image (generally  named
+              iimmaaggee..wwkkss).   eeuusscchheemmee searches these first, then a
+              system-installed path.
+
+       EEUU__MMOODDUULLEE__PPAATTHH
+              a colon-separated list of directory names: where to
+              look  for  EuLisp modules.  eeuusscchheemmee searches these
+              first, then a system-installed path  (which  gener-
+              ally contains the current directory).
+
+
+BBUUGGSS
+       If eeuusscchheemmee starts up in module rroooott then it is a good bet
+       that it couldn't find the image file iimmaaggee..wwkkss
+
+       There are a  few  differences  between  eeuusscchheemmee  and  the
+       EuLisp  Level 0 definition, but as both are still changing
+       it's futile to list them.
+
+
+SSEEEE AALLSSOO
+       _T_h_e _E_u_L_i_s_p _D_e_f_i_n_i_t_i_o_n, available from
+              ffttpp::////ffttpp..bbaatthh..aacc..uukk//ppuubb//eeuulliisspp//ddeeffnn--00..9999..ddvvii..ggzz
+
+       Also useful:
+              hhttttpp::////wwwwww..bbaatthh..aacc..uukk//~~mmaassjjaapp//EEuuLLiisspp//eeuulliisspp..hhttmmll
+
+
+
+                           16 Jan 1995                          2
+
+
+
+
+
+euscheme(1)                                           euscheme(1)
+
+
+       Euscheme Starter Notes:
+              hhttttpp::////wwwwww..bbaatthh..aacc..uukk//~~mmaassrrjjbb//SSoouurrcceess//eeuunnootteess..hhttmmll
+
+       _L_i_s_p _a_n_d _S_y_m_b_o_l_i_c _C_o_m_p_u_t_a_t_i_o_n, special edition on EuLisp,
+              vol. 6, nos. 1-2, August 1993, R Kessler, ed.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                           16 Jan 1995                          3
+
+

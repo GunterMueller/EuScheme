@@ -1,0 +1,62 @@
+
+            Euscheme: an implementation of EuLisp level 0.
+                             (Mostly.)
+
+
+Based on the xscheme sources of David Michael Betz, this is a mostly EuLisp
+level 0 compliant interpreter (working from version 0.99 of the definition,
+and some extras).  The usual applies: unrestricted non-commercial use,
+you can't blame me for anything that goes wrong, and there are probably
+bugs.
+
+Installation:  look at the makefile, and use the appropriate set of flags.
+Euscheme need two paths:  where to look for the compiled image, and
+where to look for modules to load.
+
+Image:  first euscheme checks the env variable EU_IMAGE_PATH (a colon
+separated list of directory names), then a builtin path, set from
+IMAGE_SEARCH_PATH in the Makefile.
+
+Modules: ditto for env variable EU_MODULE_PATH, then builtin
+MODULE_SEARCH_PATH (e.g., you might want to provide a set of system supplied
+modules).
+
+Bits:
+The special form (!> foo) loads and enters the module foo.em.  Modules
+can rename and filter on import (not yet on export).  Use level0.em
+for all the basic stuff, e.g.,
+
+(defmodule mymod
+  (import (level0))
+  ...
+)
+
+If you import no modules, you get nothing---not even special forms!  See
+Modules/rename.em.
+
+There are keywords (unbindable, unassignable, self-evaluating symbols), e.g.,
+(defclass foo ()
+  ((a default: 99
+      keyword: a:
+      accessor: foo-a))
+  constructor: (make-foo a:))
+
+Try (describe xx) for information on xx.
+(class-hierarchy) to see all the classes.
+
+Look at directory Modules for a few examples (the stuff in Boot uses a non-
+eulisp syntax).
+
+The latest version of the EuLisp definition is available from
+ftp://ftp.bath.ac.uk/pub/eulisp/defn-0.99.dvi.gz
+
+The latest version of Euscheme is available from
+http://www.bath.ac.uk/~masrjb/Sources/euscheme.html
+
+--Russell
+rjb@cs.bath.ac.uk
+
+
+EuScheme ported to:
+DOS by Dave DeRoure <dder@ecs.soton.ac.uk>
+RISCOS by Stewart Brodie <S.N.Brodie@ecs.soton.ac.uk>
